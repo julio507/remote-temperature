@@ -10,7 +10,7 @@
 
 	<artifactId>core</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>core</name>
+	<!-- <name>core</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
@@ -32,6 +32,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
-	</build>
+	</build> -->
 
 </project>
