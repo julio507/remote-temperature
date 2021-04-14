@@ -21,7 +21,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode( onlyExplicitlyIncluded = true )
-public class Device implements AbstractEntiry {
+public class Device implements AbstractEntity {
     
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY )
@@ -33,10 +33,6 @@ public class Device implements AbstractEntiry {
     @Override
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -54,6 +50,6 @@ public class Device implements AbstractEntiry {
     public void setIp(String ip) {
         this.ip = ip;
     }
-
+    
     
 }
