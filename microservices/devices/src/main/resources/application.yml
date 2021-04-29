@@ -13,10 +13,7 @@ eureka:
 spring:
     application:
         name: devices 
-    mvc:
-        view:
-            prefix: /WEB-INF/jsp/
-            suffix: .jsp
+        
     jpa:
         hibernate:
             ddl-auto: update

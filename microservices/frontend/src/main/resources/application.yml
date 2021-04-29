@@ -1,11 +1,5 @@
-spring:
-    application:
-        name: gateway
-
 server:
-    port: 8080
-    servlet:
-        context-path: /gateway
+    port: 8083
 
 eureka:
     instance:
@@ -16,10 +10,10 @@ eureka:
         fetch-registry: true
         register-with-eureka: true
 
-zuul:
-    sensitive-headers: Cookie
-
-ribbon:
-    ReadTimeout: 10000
-    ConnectTimeout: 10000
-    
+spring:
+    application:
+        name: frontend
+    mvc:
+        view:
+            prefix: /WEB-INF/jsp/
+            suffix: .jsp

@@ -28,7 +28,7 @@
   <modules>
     <module>devices</module>
     <module>core</module>
-
+    <module>frontend</module>
   </modules>
 
   <properties>
