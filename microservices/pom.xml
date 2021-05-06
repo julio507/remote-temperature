@@ -26,6 +26,8 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>discovery</module>
+    <module>gateway</module>
     <module>devices</module>
     <module>core</module>
     <module>frontend</module>
