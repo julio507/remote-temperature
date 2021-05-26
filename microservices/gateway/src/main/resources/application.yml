@@ -4,15 +4,15 @@ spring:
     cloud:
         gateway:
             routes:
-                -   id: frontend
-                    uri: lb:/frontend
-                    predicates:
-                        -   Path=/**
-
                 -   id: devices
                     uri: lb://devices
                     predicates:
                         -   Path=/devices/**
+                -   id: frontend
+                    uri: lb://frontend
+                    predicates:
+                        -   Path=/**
+
 
 server:
     port: 8080
