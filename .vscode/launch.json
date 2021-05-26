@@ -1,0 +1,44 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-DiscoveryApplication<discovery>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.univates.discovery.DiscoveryApplication",
+            "projectName": "discovery",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-DevicesApplication<devices>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.univates.devices.DevicesApplication",
+            "projectName": "devices",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-GatewayApplication<gateway>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.univates.gateway.GatewayApplication",
+            "projectName": "gateway",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-FrontendApplication<frontend>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.univates.frontend.FrontendApplication",
+            "projectName": "frontend",
+            "args": ""
+        }
+    ]
+}

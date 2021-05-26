@@ -1,9 +1,9 @@
 server:
-    port: 8083
+    port: 9000
 
 eureka:
     instance:
-        prefer-ip-address: true
+        hostname: localhost
     client: 
         service-url:
             defaultZone: http://localhost:8081/eureka/

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class PagesController {
 
     @GetMapping("teste")
-    public String index(Model model) {
+    public String teste(Model model) {
         return "teste";
     }
 }

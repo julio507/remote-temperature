@@ -1,4 +1,4 @@
-package com.univates.devices.endpoint.service;
+package com.univates.devices.service;
 
 import java.util.List;
 
