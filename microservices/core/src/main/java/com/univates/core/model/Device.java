@@ -1,40 +1,34 @@
 package com.univates.core.model;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import javax.persistence.OneToMany;
 
 @Entity
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-@EqualsAndHashCode( onlyExplicitlyIncluded = true )
 public class Device implements AbstractEntity {
     
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY )
-    @EqualsAndHashCode.Include
     private Long id;
     private String name;
     private String ip;
+
+    @OneToMany
+    private List<Data> data;
 
     @Override
     public Long getId() {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public String getName() {
         return name;
     }
@@ -51,5 +45,12 @@ public class Device implements AbstractEntity {
         this.ip = ip;
     }
     
+    public List<Data> getData() {
+        return data;
+    }
+
+    public void setData(List<Data> data) {
+        this.data = data;
+    }
     
 }

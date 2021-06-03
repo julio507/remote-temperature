@@ -18,4 +18,12 @@ public class DeviceService {
     public List<Device> getAll() {
         return deviceRepository.findAll();
     }
+
+    public Device getById(long id) {
+        return deviceRepository.findById(id).get();
+    }
+
+    public void save(Device a) {
+        deviceRepository.save(a);
+    }
 }
