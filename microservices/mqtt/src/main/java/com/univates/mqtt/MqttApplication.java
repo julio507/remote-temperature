@@ -1,49 +1,34 @@
 package com.univates.mqtt;
 
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.web.client.RestTemplate;
+@EntityScan({"com.univates.core.model"})
+@EnableJpaRepositories( {"com.univates.core.repository"} )
 @SpringBootApplication
 public class MqttApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MqttApplication.class, args);
 
-		String topic = "MQTT Examples";
-		String content = "Message from MqttPublishSample";
-		int qos = 2;
-		String broker = "tcp://mqtt.eclipse.org:1883";
-		String clientId = "JavaSample";
-		MemoryPersistence persistence = new MemoryPersistence();
+		RestTemplate template = new RestTemplate();
 
-		try {
-			MqttClient sampleClient = new MqttClient(broker, clientId, persistence);
-			MqttConnectOptions connOpts = new MqttConnectOptions();
-			connOpts.setCleanSession(true);
-			System.out.println("Connecting to broker: " + broker);
-			sampleClient.connect(connOpts);
-			System.out.println("Connected");
-			System.out.println("Publishing message: " + content);
-			MqttMessage message = new MqttMessage(content.getBytes());
-			message.setQos(qos);
-			sampleClient.publish(topic, message);
-			System.out.println("Message published");
-			sampleClient.disconnect();
-			System.out.println("Disconnected");
-			System.exit(0);
-		} catch (MqttException me) {
-			System.out.println("reason " + me.getReasonCode());
-			System.out.println("msg " + me.getMessage());
-			System.out.println("loc " + me.getLocalizedMessage());
-			System.out.println("cause " + me.getCause());
-			System.out.println("excep " + me);
-			me.printStackTrace();
+		List<LinkedHashMap<String, String>> devices = template.getForObject( "http://localhost:8080/devices/getAll", List.class );
+
+		List<String> topics = new ArrayList<String>();
+
+		for( LinkedHashMap<String, String> d : devices )
+		{
+			topics.add( d.get( "ip" ) );
 		}
+
+		Client.getIntance().connect(topics);
 	}
 
 }
