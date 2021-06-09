@@ -20,6 +20,7 @@ public class Client {
     private List<Subscriber> subs = new ArrayList();
 
     private static Client instance;
+    MqttClient client;
 
     private Client() {
     }
@@ -32,6 +33,16 @@ public class Client {
         return instance;
     }
 
+    public void publish(String topic, String message) {
+        try {
+            client.publish(topic, new MqttMessage(message.getBytes()));
+        }
+
+        catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void connect(List<String> topics) {
         for (String t : topics) {
             subs.add(new Subscriber(t));
@@ -42,13 +53,14 @@ public class Client {
 
     private void connect() {
 
-        MemoryPersistence persistence = new MemoryPersistence();
-
         try {
-            MqttClient client = new MqttClient("tcp://localhost:1883", UUID.randomUUID().toString(), persistence);
-            MqttConnectOptions connOpts = new MqttConnectOptions();
-            connOpts.setCleanSession(true);
-            client.connect(connOpts);
+            if (client == null) {
+                MemoryPersistence persistence = new MemoryPersistence();
+                client = new MqttClient("tcp://localhost:1883", UUID.randomUUID().toString(), persistence);
+                MqttConnectOptions connOpts = new MqttConnectOptions();
+                connOpts.setCleanSession(true);
+                client.connect(connOpts);
+            }
 
             List<String> topics = new ArrayList<String>();
             List<IMqttMessageListener> listeners = new ArrayList();

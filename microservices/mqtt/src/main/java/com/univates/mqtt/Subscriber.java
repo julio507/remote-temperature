@@ -13,14 +13,9 @@ public class Subscriber {
     public Subscriber(String device) {
         this.device = device;
 
-        topics = new String[] { device + "/temp", device + "/hum" };
+        topics = new String[] { device + "/sensor" };
 
         listeners = new IMqttMessageListener[] { new IMqttMessageListener() {
-            @Override
-            public void messageArrived(String topic, MqttMessage message) throws Exception {
-                System.out.println(topic + message);
-            }
-        }, new IMqttMessageListener() {
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 System.out.println(topic + message);
