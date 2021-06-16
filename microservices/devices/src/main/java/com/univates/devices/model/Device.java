@@ -1,4 +1,4 @@
-package com.univates.core.model;
+package com.univates.devices.model;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Device implements AbstractEntity {
+public class Device {
     
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY )
@@ -20,7 +20,6 @@ public class Device implements AbstractEntity {
     @OneToMany
     private List<Data> data;
 
-    @Override
     public Long getId() {
         return id;
     }

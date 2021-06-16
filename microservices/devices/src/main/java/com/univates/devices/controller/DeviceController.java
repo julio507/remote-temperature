@@ -3,7 +3,7 @@ package com.univates.devices.controller;
 import java.util.List;
 import java.util.Map;
 
-import com.univates.core.model.Device;
+import com.univates.devices.model.Device;
 import com.univates.devices.service.DeviceService;
 
 import org.springframework.boot.json.BasicJsonParser;

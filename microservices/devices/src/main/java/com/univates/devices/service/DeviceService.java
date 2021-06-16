@@ -2,8 +2,8 @@ package com.univates.devices.service;
 
 import java.util.List;
 
-import com.univates.core.model.Device;
-import com.univates.core.repository.DeviceRepository;
+import com.univates.devices.model.Device;
+import com.univates.devices.repository.DeviceRepository;
 
 import org.springframework.stereotype.Service;
 
