@@ -2,8 +2,11 @@ package com.univates.mqtt;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.UUID;
+
+import com.univates.mqtt.model.Device;
 
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
@@ -12,6 +15,7 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.springframework.web.client.RestTemplate;
 
 public class Client {
 
@@ -31,6 +35,26 @@ public class Client {
         return instance;
     }
 
+    public void refresh(){
+        RestTemplate template = new RestTemplate();
+
+		List<LinkedHashMap<String, String>> devices = template.getForObject( "http://localhost:8080/devices/getAll", List.class );
+
+		List<Device> topics = new ArrayList<Device>();
+
+		for( LinkedHashMap<String, String> d : devices )
+		{
+			Device device = new Device();
+
+			device.setId( Long.parseLong( String.valueOf( d.get("id") ) ) );
+			device.setIp( d.get( "ip" ) );
+
+			topics.add( device );
+		}
+
+		connect(topics);
+    }
+
     public void publish(String topic, String message) {
         try {
             client.publish(topic, new MqttMessage(message.getBytes()));
@@ -41,8 +65,8 @@ public class Client {
         }
     }
 
-    public void connect(List<String> topics) {
-        for (String t : topics) {
+    public void connect(List<Device> topics) {
+        for (Device t : topics) {
             subs.add(new Subscriber(t));
         }
 

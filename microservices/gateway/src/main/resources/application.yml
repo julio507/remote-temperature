@@ -4,6 +4,14 @@ spring:
     cloud:
         gateway:
             routes:
+                -   id: data
+                    uri: lb://data
+                    predicates:
+                    -   Path=/data/**
+                -   id: mqtt
+                    uri: lb://mqtt
+                    predicates:
+                        -   Path=/mqtt/**
                 -   id: devices
                     uri: lb://devices
                     predicates:

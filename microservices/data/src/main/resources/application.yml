@@ -1,1 +1,27 @@
+server:
+    port: 8085
 
+eureka:
+    instance:
+        hostname: localhost
+    client:
+        service-url:
+            defaultZone: http://localhost:8081/eureka/
+        fetch-registry: true
+        register-with-eureka: true
+
+spring:
+    application:
+        name: data 
+        
+    jpa:
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibenate:
+                dialect: org.hibernate.dialect.MariaDBDialect
+    datasource:
+        url: jdbc:mysql://localhost:3306/remotetemperature
+        username: root
+        password: yq7z88YSELzue3cT
+        driver-class-name: org.mariadb.jdbc.Driver

@@ -1,4 +1,4 @@
-package com.univates.mqtt.model;
+package com.univates.data.model;
 
 import java.util.Date;
 
