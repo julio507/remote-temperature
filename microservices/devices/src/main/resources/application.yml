@@ -23,5 +23,5 @@ spring:
     datasource:
         url: jdbc:mysql://localhost:3306/remotetemperature
         username: root
-        password: yq7z88YSELzue3cT
+        password: admin
         driver-class-name: org.mariadb.jdbc.Driver
