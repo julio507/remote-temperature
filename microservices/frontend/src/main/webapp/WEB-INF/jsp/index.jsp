@@ -4,7 +4,7 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
+    <title>Remote Temperature</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='/css/main.css'>
 </head>
@@ -52,6 +52,34 @@
                         this.setAttribute("class", "selected");
 
                         _selectedRow = this;
+
+                        http = new XMLHttpRequest();
+
+                        http.open("GET", "/data/getLatest?deviceId=" + this.value.id);
+                        http.setRequestHeader("Content-Type", "application/json");
+
+                        http.send();
+
+                        http.onreadystatechange = function () {
+                            if (this.readyState == 4 && this.status == 200) {
+
+                                temperatureValue = document.getElementById("temperatureValue");
+                                    humidityValue = document.getElementById("humidityValue");
+
+                                if (http.responseText) {
+                                    data = JSON.parse(http.responseText);
+
+                                    temperatureValue.innerHTML = data.temperature ? data.temperature : "n/d";
+                                    humidityValue.innerHTML = data.humidity ? data.humidity : "n/d";
+                                }
+
+                                else
+                                {
+                                    temperatureValue.innerHTML = "n/d";
+                                    humidityValue.innerHTML = "n/d";
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -109,26 +137,40 @@
 </script>
 
 <body>
-    <div>
-        <p>ID:</p><input id="idField" type="text" disabled="true">
-        <p>Nome:</p><input id="nameField" type="text">
-        <p>IP:</p><input id="ipField" type="text">
-        <input value="Salvar" onclick="send()" type="button">
-        <input value="Limpar" onclick="clearFields()" type="button">
-    </div>
-    <div>
-        <table id="dataTable">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>IP</th>
-                </tr>
-            </thead>
-            <tbody>
+    <div id="left">
+        <div id="form">
+            <p>ID:</p><input id="idField" type="text" disabled="true">
+            <p>Nome:</p><input id="nameField" type="text">
+            <p>IP:</p><input id="ipField" type="text">
+            <input value="Salvar" onclick="send()" type="button">
+            <input value="Limpar" onclick="clearFields()" type="button">
+        </div>
+        <div>
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>IP</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="right">
+        <div>
+            <p>Sesores:</p>
+            <div>
+                <p>Temperatura:<span id="temperatureValue"></span></p>
+                <p>Humidade:<span id="humidityValue"></span></p>
+            </div>
+        </div>
+        <div>
+            <p>Controles:</p>
+        </div>
     </div>
 </body>
 

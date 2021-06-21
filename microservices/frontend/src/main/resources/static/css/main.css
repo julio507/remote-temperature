@@ -1,6 +1,7 @@
 body{
     background-color: white;
     font-family: Arial, Helvetica, sans-serif;
+    display: flex;
 }
 
 table{
@@ -15,36 +16,12 @@ td{
     border: 1px black solid;
 }
 
-form {
-    height: 100%;
-}
-
-form p {
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-form input{
-    height: 20px;
-    width: 400px;
-}
-
-form input[type="button"]
-{
-    width: 100px;
-    height: 30px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-form input[type="checkbox"]
-{
-    width: auto;
-    height: auto;
-}
-
-.horizontal{
+#form{
     display: flex;
+}
+
+#form p{
+    margin: 0;
 }
 
 .selected{
