@@ -9,8 +9,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-@EntityScan({"com.univates.core.model"})
-@EnableJpaRepositories( {"com.univates.core.repository"} )
 public class DevicesApplication {
 
 	public static void main(String[] args) {

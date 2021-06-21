@@ -1,10 +1,10 @@
-package com.univates.core;
+package com.univates.data;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CoreApplicationTests {
+class DataApplicationTests {
 
 	@Test
 	void contextLoads() {
