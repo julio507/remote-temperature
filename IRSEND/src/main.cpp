@@ -165,7 +165,7 @@ void wifiConnect()
 EspMQTTClient client(
     "AlaKlein",
     "yrl4771*",
-    "192.168.2.248",
+    "192.168.2.60",
     "node",
     1883);
 
