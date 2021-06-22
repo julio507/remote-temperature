@@ -7,9 +7,74 @@
     <title>Remote Temperature</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='/css/main.css'>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 <script>
     _selectedRow = null;
+
+    refreshData = function (row) {
+        http = new XMLHttpRequest();
+
+        http.open("GET", "/data/getLatest?deviceId=" + row.value.id);
+        http.setRequestHeader("Content-Type", "application/json");
+
+        http.send();
+
+        http.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+
+                temperatureValue = document.getElementById("temperatureValue");
+                humidityValue = document.getElementById("humidityValue");
+
+                if (http.responseText) {
+                    data = JSON.parse(http.responseText);
+
+                    temperatureValue.innerHTML = data.temperature ? data.temperature : "n/d";
+                    humidityValue.innerHTML = data.humidity ? data.humidity : "n/d";
+                }
+
+                else {
+                    temperatureValue.innerHTML = "n/d";
+                    humidityValue.innerHTML = "n/d";
+                }
+            }
+        }
+
+        http2 = new XMLHttpRequest();
+
+        http2.open("GET", "data/getAll?deviceId=" + row.value.id);
+        http2.setRequestHeader("Content-Type", "application/json");
+
+        http2.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+
+                chartData = JSON.parse(http2.responseText);
+
+                var data = new google.visualization.DataTable();
+                data.addColumn('datetime', 'Data');
+                data.addColumn('number', 'Temperature');
+                data.addColumn('number', 'Humidade');
+
+                var options = {
+                    'title': 'Dados',
+                    'height': '100%',
+                    'width': '100%',
+                    'hAxis': {
+                        'format': 'dd/MM/yy'
+                    }
+                };
+
+                for (i = 0; i < chartData.length; i++) {
+                    data.addRow([new Date(chartData[i].date), chartData[i].temperature, chartData[i].humidity]);
+                }
+
+                chart = new google.visualization.AreaChart(document.getElementById('graph'));
+                chart.draw(data, options);
+            }
+        }
+
+        http2.send();
+    }
 
     refresh = function () {
         http = new XMLHttpRequest();
@@ -59,32 +124,7 @@
 
                         _selectedRow = this;
 
-                        http = new XMLHttpRequest();
-
-                        http.open("GET", "/data/getLatest?deviceId=" + this.value.id);
-                        http.setRequestHeader("Content-Type", "application/json");
-
-                        http.send();
-
-                        http.onreadystatechange = function () {
-                            if (this.readyState == 4 && this.status == 200) {
-
-                                temperatureValue = document.getElementById("temperatureValue");
-                                humidityValue = document.getElementById("humidityValue");
-
-                                if (http.responseText) {
-                                    data = JSON.parse(http.responseText);
-
-                                    temperatureValue.innerHTML = data.temperature ? data.temperature : "n/d";
-                                    humidityValue.innerHTML = data.humidity ? data.humidity : "n/d";
-                                }
-
-                                else {
-                                    temperatureValue.innerHTML = "n/d";
-                                    humidityValue.innerHTML = "n/d";
-                                }
-                            }
-                        }
+                        refreshData( this );
                     }
 
                     if (_selectedRow && _selectedRow.value.id == devices[i].id) {
@@ -142,6 +182,8 @@
     }
 
     window.onload = function () {
+        google.charts.load('current', { 'packages': ['corechart'] });
+
         refresh();
 
         document.getElementById("temperatureInput").oninput = function () {
@@ -201,32 +243,7 @@
 
         window.setInterval(function () {
             if (_selectedRow) {
-                http = new XMLHttpRequest();
-
-                http.open("GET", "/data/getLatest?deviceId=" + _selectedRow.value.id);
-                http.setRequestHeader("Content-Type", "application/json");
-
-                http.send();
-
-                http.onreadystatechange = function () {
-                    if (this.readyState == 4 && this.status == 200) {
-
-                        temperatureValue = document.getElementById("temperatureValue");
-                        humidityValue = document.getElementById("humidityValue");
-
-                        if (http.responseText) {
-                            data = JSON.parse(http.responseText);
-
-                            temperatureValue.innerHTML = data.temperature ? data.temperature : "n/d";
-                            humidityValue.innerHTML = data.humidity ? data.humidity : "n/d";
-                        }
-
-                        else {
-                            temperatureValue.innerHTML = "n/d";
-                            humidityValue.innerHTML = "n/d";
-                        }
-                    }
-                }
+                refreshData( _selectedRow );
             }
         }, 5000);
     }
@@ -257,6 +274,7 @@
         </div>
     </div>
     <div id="right">
+        <div id="graph"></div>
         <div>
             <p>Sesores:</p>
             <div>
