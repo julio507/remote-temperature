@@ -95,8 +95,6 @@ public class Client {
             IMqttToken token = client.subscribeWithResponse(topics.toArray(new String[topics.size()]),
                     listeners.toArray(new IMqttMessageListener[listeners.size()]));
 
-            token.waitForCompletion();
-
         } catch (MqttException me) {
             me.printStackTrace();
         }

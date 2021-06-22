@@ -41,11 +41,15 @@
                         nameField = document.getElementById("nameField");
                         ipField = document.getElementById("ipField");
 
+                        temperatureInput = document.getElementById("temperatureInput");
+                        statusInput = document.getElementById("statusInput");
+
                         idField.value = this.value.id;
                         nameField.value = this.value.name;
                         ipField.value = this.value.ip;
 
-                        
+                        temperatureInput.value = this.value.temperature ? this.value.temperature : 0;
+                        statusInput.innerHTML = ( this.value.temperature == 55 || this.value.temperature == 0 ) ? "Desligado" : "Ligado";
 
                         if (_selectedRow != null) {
                             _selectedRow.setAttribute("class", null);
@@ -66,7 +70,7 @@
                             if (this.readyState == 4 && this.status == 200) {
 
                                 temperatureValue = document.getElementById("temperatureValue");
-                                    humidityValue = document.getElementById("humidityValue");
+                                humidityValue = document.getElementById("humidityValue");
 
                                 if (http.responseText) {
                                     data = JSON.parse(http.responseText);
@@ -75,13 +79,16 @@
                                     humidityValue.innerHTML = data.humidity ? data.humidity : "n/d";
                                 }
 
-                                else
-                                {
+                                else {
                                     temperatureValue.innerHTML = "n/d";
                                     humidityValue.innerHTML = "n/d";
                                 }
                             }
                         }
+                    }
+
+                    if( _selectedRow && _selectedRow.value.id == devices[i].id ){
+                        row.onclick();
                     }
                 }
             }
@@ -110,17 +117,18 @@
         idField = document.getElementById("idField");
         nameField = document.getElementById("nameField");
         ipField = document.getElementById("ipField");
+        temperatureInput = document.getElementById("temperatureInput");
 
         value = {};
 
         value.id = idField.value;
         value.name = nameField.value;
         value.ip = ipField.value;
+        value.temperature = temperatureInput.value;
 
         http.onreadystatechange = function () {
             if (this.readyState == 4) {
                 if (this.status == 200) {
-                    clear();
                     refresh();
                 }
 
@@ -135,6 +143,67 @@
 
     window.onload = function () {
         refresh();
+
+        document.getElementById("temperatureInput").oninput = function () {
+            if (!this.value || this.value < 17 || this.value > 30) {
+                this.style.backgroundColor = "red";
+            }
+
+            else {
+                this.style.backgroundColor = "";
+                http.open("POST", "/mqtt/publish");
+
+                http.setRequestHeader("Content-Type", "application/json");
+
+                value = {};
+
+                value.ip = _selectedRow.value.ip;
+                value.temperature = this.value;
+
+                http.onreadystatechange = function () {
+                    if (this.readyState == 4) {
+                        if (this.status == 500) {
+                            alert(JSON.parse(this.responseText).message);
+                        }
+                    }
+                }
+
+                http.send(JSON.stringify(value));
+
+                send();
+            }
+        }
+
+        document.getElementById("shutdownButton").onclick = function () {
+            http.open("POST", "/mqtt/publish");
+
+            http.setRequestHeader("Content-Type", "application/json");
+
+            value = {};
+
+            value.ip = _selectedRow.value.ip;
+            value.temperature = 55;
+
+            document.getElementById("temperatureInput").value = 0;
+
+            http.onreadystatechange = function () {
+                if (this.readyState == 4) {
+                    if (this.status == 500) {
+                        alert(JSON.parse(this.responseText).message);
+                    }
+                }
+            }
+
+            http.send(JSON.stringify(value));
+
+            send();
+        }
+
+        window.setInterval( function(){
+            if( _selectedRow ){
+                _selectedRow.onclick();
+            }
+        }, 5000 );
     }
 </script>
 
@@ -173,8 +242,8 @@
         <div>
             <p>Controles:</p>
             <p>Status:<span id="statusInput"></span></p>
-            <p>Temperatura:<input id="temperatureInput" type="text"/></p>
-            <input id="shutdownButton" type="button" value="Desilgar"/>
+            <p>Temperatura:<input id="temperatureInput" type="text" /></p>
+            <input id="shutdownButton" type="button" value="Desilgar" />
         </div>
     </div>
 </body>

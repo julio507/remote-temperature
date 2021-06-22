@@ -50,8 +50,24 @@ public class DeviceController {
             d = deviceService.getById(Long.parseLong(json.get("id").toString()));
         }
 
-        d.setName( json.get("name").toString() );
-        d.setIp( json.get( "ip" ).toString() );
+        if (json.get("temperature") == null || json.get("temperature").toString().isEmpty()) {
+            d.setTemperature(0.0);
+        }
+
+        else {
+            d.setTemperature(Double.parseDouble(String.valueOf(json.get("temperature"))));
+        }
+
+        if (d.getTemperature() == 55) {
+            d.setTemperature(0.0);
+        }
+
+        else if ( (d.getTemperature() < 17 || d.getTemperature() > 30 ) && d.getTemperature() != 0 ) {
+            throw new Exception("Temperatura invalida!");
+        }
+
+        d.setName(json.get("name").toString());
+        d.setIp(json.get("ip").toString());
 
         deviceService.save(d);
     }
