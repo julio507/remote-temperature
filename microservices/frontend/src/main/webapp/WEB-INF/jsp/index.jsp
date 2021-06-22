@@ -49,7 +49,7 @@
                         ipField.value = this.value.ip;
 
                         temperatureInput.value = this.value.temperature ? this.value.temperature : 0;
-                        statusInput.innerHTML = ( this.value.temperature == 55 || this.value.temperature == 0 ) ? "Desligado" : "Ligado";
+                        statusInput.innerHTML = (!this.value.temperature || this.value.temperature == 55 || this.value.temperature == 0) ? "Desligado" : "Ligado";
 
                         if (_selectedRow != null) {
                             _selectedRow.setAttribute("class", null);
@@ -87,7 +87,7 @@
                         }
                     }
 
-                    if( _selectedRow && _selectedRow.value.id == devices[i].id ){
+                    if (_selectedRow && _selectedRow.value.id == devices[i].id) {
                         row.onclick();
                     }
                 }
@@ -199,11 +199,36 @@
             send();
         }
 
-        window.setInterval( function(){
-            if( _selectedRow ){
-                _selectedRow.onclick();
+        window.setInterval(function () {
+            if (_selectedRow) {
+                http = new XMLHttpRequest();
+
+                http.open("GET", "/data/getLatest?deviceId=" + _selectedRow.value.id);
+                http.setRequestHeader("Content-Type", "application/json");
+
+                http.send();
+
+                http.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+
+                        temperatureValue = document.getElementById("temperatureValue");
+                        humidityValue = document.getElementById("humidityValue");
+
+                        if (http.responseText) {
+                            data = JSON.parse(http.responseText);
+
+                            temperatureValue.innerHTML = data.temperature ? data.temperature : "n/d";
+                            humidityValue.innerHTML = data.humidity ? data.humidity : "n/d";
+                        }
+
+                        else {
+                            temperatureValue.innerHTML = "n/d";
+                            humidityValue.innerHTML = "n/d";
+                        }
+                    }
+                }
             }
-        }, 5000 );
+        }, 5000);
     }
 </script>
 
