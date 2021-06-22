@@ -16,6 +16,7 @@ public class Device {
     private Long id;
     private String name;
     private String ip;
+    private Double temperature;
 
     @OneToMany
     private List<Data> data;
@@ -52,4 +53,11 @@ public class Device {
         this.data = data;
     }
     
+    public Double getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(Double temperature) {
+        this.temperature = temperature;
+    }
 }

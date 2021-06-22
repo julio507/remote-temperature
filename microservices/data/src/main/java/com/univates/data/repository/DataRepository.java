@@ -17,6 +17,6 @@ public interface DataRepository extends JpaRepository<Data, Long> {
             + " select max( d.date ) from Data d where d.device = ?1 ) ")
     Data getLatest(Device device);
 
-    @Query( "select d from Data d where d.device = ?1" )
+    @Query( "select d from Data d where d.device = ?1 order by d.date" )
     List<Data> getAll( Device device );
 }

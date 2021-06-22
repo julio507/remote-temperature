@@ -21,15 +21,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/mqtt")
 public class MqttController {
 
-    @PostMapping("publish")
-    public void setControllerTemp(@RequestBody String data) {
-        Map<String, Object> json = new BasicJsonParser().parseMap(data);
+  @PostMapping("publish")
+  public void setControllerTemp(@RequestBody String data) {
+    Map<String, Object> json = new BasicJsonParser().parseMap(data);
 
-        Client.getIntance().publish( json.get( "ip" ) + "/controller", json.get( "temperature" ).toString() );
-    }
+    Client.getIntance().publish(json.get("ip") + "/controller", json.get("temperature").toString());
+  }
 
-    @GetMapping("refresh")
-    public void refresh(){
-		Client.getIntance().refresh();
-    }
+  @GetMapping("refresh")
+  public void refresh() {
+    Client.getIntance().refresh();
+  }
 }
