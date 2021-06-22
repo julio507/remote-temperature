@@ -45,6 +45,8 @@
                         nameField.value = this.value.name;
                         ipField.value = this.value.ip;
 
+                        
+
                         if (_selectedRow != null) {
                             _selectedRow.setAttribute("class", null);
                         }
@@ -170,6 +172,9 @@
         </div>
         <div>
             <p>Controles:</p>
+            <p>Status:<span id="statusInput"></span></p>
+            <p>Temperatura:<input id="temperatureInput" type="text"/></p>
+            <input id="shutdownButton" type="button" value="Desilgar"/>
         </div>
     </div>
 </body>
