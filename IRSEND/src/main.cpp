@@ -9,7 +9,6 @@
 #include <DHT_U.h>
 
 #define DRD_TIMEOUT 10
-#define DRD_ADDRESS 0 //pino led
 #define DHTPIN 13
 #define DHTTYPE DHT11
 
@@ -159,11 +158,7 @@ void wifiConnect()
   while (WiFi.status() != WL_CONNECTED)
   {
     delay(500);
-    Serial.print(".");
   }
-  Serial.println("");
-  Serial.print("WiFi connected.");
-  Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 }
 
@@ -176,11 +171,85 @@ EspMQTTClient client(
 
 void onConnectionEstablished()
 {
-  // Subscribe to "mytopic/test" and display received message to Serial
-  client.subscribe("ip/sensor", [](const String &payload)
+  client.subscribe(WiFi.localIP().toString() + "/controller", [](const String &payload)
                    {
                      Serial.println(payload);
                      temp = payload.toInt();
+                     if (temp == 17)
+                     {
+                       irsend.sendRaw(rawData17, 199, 38);
+                       temp = 0;
+                     }
+                     else if (temp == 18)
+                     {
+                       irsend.sendRaw(rawData18, 199, 38);
+                       temp = 0;
+                     }
+                     else if (temp == 19)
+                     {
+                       irsend.sendRaw(rawData19, 199, 38);
+                       temp = 0;
+                     }
+                     else if (temp == 20)
+                     {
+                       irsend.sendRaw(rawData20, 199, 38);
+                       temp = 0;
+                     }
+                     else if (temp == 21)
+                     {
+                       irsend.sendRaw(rawData21, 199, 38);
+                       temp = 0;
+                     }
+                     else if (temp == 22)
+                     {
+                       irsend.sendRaw(rawData22, 199, 38);
+                       temp = 0;
+                     }
+                     else if (temp == 23)
+                     {
+                       irsend.sendRaw(rawData23, 199, 38);
+                       temp = 0;
+                     }
+                     else if (temp == 24)
+                     {
+                       irsend.sendRaw(rawData24, 199, 38);
+                       temp = 0;
+                     }
+                     else if (temp == 25)
+                     {
+                       irsend.sendRaw(rawData25, 199, 38);
+                       temp = 0;
+                     }
+                     else if (temp == 26)
+                     {
+                       irsend.sendRaw(rawData26, 199, 38);
+                       temp = 0;
+                     }
+                     else if (temp == 27)
+                     {
+                       irsend.sendRaw(rawData27, 199, 38);
+                       temp = 0;
+                     }
+                     else if (temp == 28)
+                     {
+                       irsend.sendRaw(rawData28, 199, 38);
+                       temp = 0;
+                     }
+                     else if (temp == 29)
+                     {
+                       irsend.sendRaw(rawData29, 199, 38);
+                       temp = 0;
+                     }
+                     else if (temp == 30)
+                     {
+                       irsend.sendRaw(rawData30, 199, 38);
+                       temp = 0;
+                     }
+                     else if (temp == 55)
+                     {
+                       irsend.sendRaw(rawData55, 199, 38);
+                       temp = 0;
+                     }
                    });
 }
 
@@ -188,118 +257,20 @@ void setup()
 {
   Serial.begin(9600);
   wifiConnect();
+  irsend.begin();
   dht.begin();
-
   sensor_t sensor;
   dht.temperature().getSensor(&sensor);
   dht.humidity().getSensor(&sensor);
-  pinMode(LED_BUILTIN, OUTPUT);
-}
-
-void send(uint16_t a[199])
-{
-  irsend.sendRaw(a, 199, 38);
 }
 
 void loop()
 {
   client.loop();
-
-  if (temp == 19)
-  {
-    send(rawData19);
-    client.publish("ip", WiFi.localIP().toString());
-    digitalWrite(LED_BUILTIN, LOW);
-  }
-  else
-  {
-    irsend.sendRaw(rawData55, 199, 38);
-    digitalWrite(LED_BUILTIN, HIGH);
-  }
-  //digitalWrite(LED_BUILTIN, HIGH);
-  if (temp == 17)
-  {
-    irsend.sendRaw(rawData17, 199, 38);
-    delay(2000);
-  }
-  else if (temp == 18)
-  {
-    irsend.sendRaw(rawData18, 199, 38);
-    delay(2000);
-  }
-  else if (temp == 19)
-  {
-    irsend.sendRaw(rawData19, 199, 38);
-    delay(2000);
-  }
-  else if (temp == 20)
-  {
-    irsend.sendRaw(rawData20, 199, 38);
-    delay(2000);
-  }
-  else if (temp == 21)
-  {
-    irsend.sendRaw(rawData21, 199, 38);
-    delay(2000);
-  }
-  else if (temp == 22)
-  {
-    irsend.sendRaw(rawData22, 199, 38);
-    delay(2000);
-  }
-  else if (temp == 23)
-  {
-    irsend.sendRaw(rawData23, 199, 38);
-    delay(2000);
-  }
-  else if (temp == 24)
-  {
-    irsend.sendRaw(rawData24, 199, 38);
-    delay(2000);
-  }
-  else if (temp == 25)
-  {
-    irsend.sendRaw(rawData25, 199, 38);
-    delay(2000);
-  }
-  else if (temp == 26)
-  {
-    irsend.sendRaw(rawData26, 199, 38);
-    delay(2000);
-  }
-  else if (temp == 27)
-  {
-    irsend.sendRaw(rawData27, 199, 38);
-    delay(2000);
-  }
-  else if (temp == 28)
-  {
-    irsend.sendRaw(rawData28, 199, 38);
-    delay(2000);
-  }
-  else if (temp == 29)
-  {
-    irsend.sendRaw(rawData29, 199, 38);
-    delay(2000);
-  }
-  else if (temp == 30)
-  {
-    irsend.sendRaw(rawData30, 199, 38);
-    delay(2000);
-  }
-  else if (temp == 55)
-  {
-    irsend.sendRaw(rawData55, 199, 38);
-    delay(2000);
-  }
-
-  // Delay between measurements.
   delay(5000);
-  // Get temperature event and print its value.
-  sensors_event_t event;
-  dht.temperature().getEvent(&event);
-
-  client.publish("temp", (String)event.temperature);
-  dht.humidity().getEvent(&event);
-  client.publish("humidade", (String)event.relative_humidity);
+  sensors_event_t eventT;
+  sensors_event_t eventH;
+  dht.temperature().getEvent(&eventT);
+  dht.humidity().getEvent(&eventH);
+  client.publish(WiFi.localIP().toString() + "/sensor", (String)eventT.temperature + ";" + (String)eventH.relative_humidity);
 }
